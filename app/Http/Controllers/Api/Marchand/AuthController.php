@@ -8,11 +8,11 @@ use App\Models\Marchand;
 use App\Traits\GeneralTrait;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Validator;
+use App\Http\Middleware;
 use Auth;
 
 class AuthController extends Controller
 {
-    
 
     use GeneralTrait;
 
@@ -45,12 +45,28 @@ class AuthController extends Controller
             $marchand = Auth::guard('marchand-api')->user();
             $marchand->api_token = $token;
             //return token
-            return $this->returnData('marchans', $marchand);
+            return $this->returnData('marchands', $marchand);
 
         } catch (\Exception $ex) {
             return $this->returnError($ex->getCode(), $ex->getMessage());
         }
 
+
+    }
+    public function logout(Request $request)
+    {
+         $token = $request -> header('auth-token');
+        if($token){
+            try {
+
+                JWTAuth::setToken($token)->invalidate(); //logout
+            }catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e){
+                return  $this -> returnError('','some thing went wrongs');
+            }
+            return $this->returnSuccessMessage('Logged out successfully');
+        }else{
+            $this -> returnError('','some thing went wrongs');
+        }
 
     }
     

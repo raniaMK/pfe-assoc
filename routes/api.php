@@ -25,10 +25,9 @@ use Illuminate\Support\Facades\Route;
 //});
 
     Route::group(['prefix' => 'admin','namespace'=> 'App\Http\Controllers\Api\Marchand'],function (){
-       
         Route::post('login', 'AuthController@login');
 
-        Route::post('logout','AuthController@logout') -> middleware(['auth.guard:admin-api']);
+        Route::post('logout','AuthController@logout') -> middleware(['auth.guard:marchand-api']);
           //invalidate token security side
 
          //broken access controller user enumeration
