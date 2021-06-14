@@ -28,9 +28,15 @@ use Illuminate\Support\Facades\Route;
         Route::post('login', 'AuthController@login');
 
         Route::post('logout','AuthController@logout') -> middleware(['auth.guard:marchand-api']);
+       // Route::post('get-personne-byCin','AuthController@getPersonneByCin') -> middleware(['auth.guard:marchand-api']);
+        Route::get('get-personne-bycheque/{created_at}','AuthController@getPersonneByCheque') -> middleware(['auth.guard:marchand-api']);
           //invalidate token security side
 
          //broken access controller user enumeration
+         Route::get('profile', 'AuthController@profile') -> middleware(['auth.guard:marchand-api']);
+         Route::get('get-solde', 'AuthController@getSoldeMarchand') -> middleware(['auth.guard:marchand-api']);
+         Route::get('add-achat/{chequeId}/{marchandId}/{montant}','AuthController@AddAchat') -> middleware(['auth.guard:marchand-api']);
+
     });
 
     Route::group(['prefix' => 'user','namespace'=>'User'],function (){

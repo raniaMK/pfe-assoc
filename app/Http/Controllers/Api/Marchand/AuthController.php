@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api\Marchand;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Marchand;
+use App\Models\Cheque;
+use App\Models\Achat;
+use App\Models\Personne;
 use App\Traits\GeneralTrait;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Validator;
@@ -69,5 +72,117 @@ class AuthController extends Controller
         }
 
     }
+    public function getPersonneByCin(Request $request)
+    {
+
+      // $personne = Personne::selection()->find($request->id);
+    
+       $personne = Personne::where('CIN',$request -> CIN) ->first();
+       $cheque= Cheque::where ('id',$personne -> id)->first();
+      // dd( $cheque);
+        if (!$personne)
+           
+        return $this->returnError('001', 'not found');
+
+     return $this->returnData('personne', $personne, $cheque );
+
+
+    }  public function getPersonneByCheque($createdAt)
+    {
+       $cheque= Cheque::where ('created_at', $createdAt)->first();
+       $personne = Personne::where('id',$cheque -> personne_id) ->first();      
+     
+        if (!$cheque)
+           
+        return $this->returnError('001', 'not found');
+
+     return $this->returnData('PersonneByCheque',$personne , $cheque );
+
+
+    }
+
+    public function profile()
+    {
+       
+
+       $marchand = Auth::guard('marchand-api')->user();
+ 
+        return  $this->returnData('marchand', $marchand );
+
+    }
+    public function getSoldeMarchand()
+    {
+
+       $marchand = Auth::guard('marchand-api')->user()->achats->sum('montant');
+        return  $this->returnData('marchand', $marchand );
+    }
+
+ /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function AddAchat($chequeId, $marchandId, Request $request)
+    {
+
+        $marchand = Auth::guard('marchand-api')->user();
+
+        //checking whether the cheque required exist or not
+        try {
+            $cheque= Cheque::findOrFail($chequeId);
+        } catch (ModelNotFoundException $e) {
+            throw new NotFoundHttpException();
+        }
+
+        //checking whether the Marchand required exist or not
+        try {
+            $marchand = Marchand::findOrFail($marchandId);
+        } catch (ModelNotFoundException $e) {
+            throw new NotFoundHttpException();
+        }        
+            //if condition verifier le montant par rapport solde cheque 
+            if ($cheque->montant > $request->montant)  {
+                $achat = new Achat();
+                $achat->marchand_id = $marchand->id;
+                $achat->cheque_id = $cheque->id;
+                $achat->montant = $request->montant;
+                $achat->save();
+                $montantInitial= $cheque->montant;
+               
+                $cheque::where('id',$chequeId) -> update(['montant' =>  $cheque->montant= $montantInitial - $request->montant ]);
+                $cheque->save(); 
+
+            }
+            else {
+                return response()->json(
+                    [
+                        'status'  => false,
+                        'message' => 'montant insuffisant',
+                    ]
+                );
+            }  
+            
+               
+            if ( $achat->save()) {
+                return response()->json(
+                    [
+                        'status' => true,
+                        'achat'   => $achat,                    ]
+                );
+            } else {
+                return response()->json(
+                    [
+                        'status'  => false,
+                        'message' => 'Oops, smth wrong .',
+                    ]
+                );
+            }   
+         }
+
+
+        
+
+
     
 }

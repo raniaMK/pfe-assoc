@@ -25,7 +25,12 @@ class Marchand  extends Authenticatable  implements JWTSubject
     protected $hidden = [
         'password',
     ];
-    
+    public function achats()
+    {
+        return $this->hasMany(Achat::class);
+
+        //return $this->hasMany('App\Models\Coupon', 'id', 'personne_id');
+    }
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

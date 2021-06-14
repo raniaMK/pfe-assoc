@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Personne extends Model
 {
     use HasFactory;
+    protected $table = 'personnes';
 
     protected $fillable = [
         'nom',
@@ -24,5 +25,20 @@ class Personne extends Model
         return $this->hasMany(Cheque::class);
 
         //return $this->hasMany('App\Models\Coupon', 'id', 'personne_id');
+    } 
+    public function achats()
+    {
+        return $this->hasMany(Achat::class);
+
+        //return $this->hasMany('App\Models\Coupon', 'id', 'personne_id');
+    }
+    public function scopeSelection($query)
+    {
+        return $query->select('id', 'prenom','CIN',
+        'date_naiss',
+        'tel',
+        'adresse',
+        'Situation_Fam',
+        'nb_enfants');
     }
 }
