@@ -31,6 +31,13 @@ class Marchand  extends Authenticatable  implements JWTSubject
 
         //return $this->hasMany('App\Models\Coupon', 'id', 'personne_id');
     }
+
+    public function reclamation()
+    {
+        return $this->hasMany(Reclamation::class);
+
+        //return $this->hasMany('App\Models\Coupon', 'id', 'personne_id');
+    } 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

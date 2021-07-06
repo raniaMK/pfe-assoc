@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Marchand;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Marchand;
+use App\Models\Reclamation;
 use App\Models\Cheque;
 use App\Models\Achat;
 use App\Models\Personne;
@@ -180,8 +181,32 @@ class AuthController extends Controller
             }   
          }
 
+         public function reclamation(Request $request)
+         {
 
-        
+            $marchand = Auth::guard('marchand-api')->user();
+            $reclamation = new Reclamation();
+                $reclamation->sujet =$request->sujet;
+                $reclamation->message = $request->message;
+                $reclamation->marchand_id = $marchand->id;
+                $reclamation->save();
+                if ( $reclamation->save()) {
+                    return response()->json(
+                        [
+                            'status' => true,
+                            'achat'   => $reclamation,                    ]
+                    );
+                } else {
+                    return response()->json(
+                        [
+                            'status'  => false,
+                            'message' => 'Oops, smth wrong .',
+                        ]
+                    );
+                }   
+
+         }
+      
 
 
     

@@ -13,7 +13,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{asset('images/admin_img/avatar.jpg')}}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{asset('images/admin_img/avatar.png')}}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
                 <a href="#" class="d-block">{{ Auth::user()->name }}</a>
@@ -23,7 +23,15 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
+              
+            <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-chalkboard"></i>
+                                <p>
+                                    Dashboard
+                                </p>
+                            </a>
+                        </li>  <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 {{--<li class="nav-item has-treeview menu-open">
                     <a href="#" class="nav-link active">
@@ -57,11 +65,12 @@
                         </p>
                     </a>
                 </li>--}}
-
+                
+               
                 <li class="nav-item has-treeview">
                     @can('user-list')
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-edit"></i>
+                        <i class="fas fa-users-cog nav-icon"></i>
                         <p>
                             User / Role
                             <i class="right fas fa-angle-left"></i>
@@ -72,13 +81,13 @@
 
                         <li class="nav-item">
                             <a href="{{ route('users.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
+                                <i class="fas fa-bomb nav-icon"></i>
                                 <p>Manage Users</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('roles.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
+                                <i class="fas fa-bomb nav-icon"></i>
                                 <p>Manage Role</p>
                             </a>
                         </li>
@@ -87,7 +96,7 @@
                 <li class="nav-item has-treeview">
 
                     <a href="{{ route('personne.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-edit"></i>
+                        <i class="nav-icon fas fa-user"></i>
                         <p>
                             Famille
                         </p>
@@ -95,17 +104,33 @@
                 </li>
                 <li class="nav-item has-treeview">
                     <a href="{{route('marchand.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-edit"></i>
-                        <p>
+                    <i class="fas fa-user-tie"></i>                     
+                       <p>
                             Commerçant
                         </p>
                     </a>
                 </li>
-               <li class="nav-item has-treeview">
+                <li class="nav-item has-treeview">
                     <a href="{{route('cheque.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-edit"></i>
+                        <i class="nav-icon fas fa-qrcode"></i>
                         <p>
-                            Cheque
+                            Coupon
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="{{route('cheque.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-dollar-sign"></i>
+                        <p>
+                            Achat
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="{{route('logout')}}" class="nav-link">
+                        <i class="nav-icon fas fa-power-off"></i>
+                        <p>
+                            Logout
                         </p>
                     </a>
                 </li>
